@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fridge Contents Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Welcome to Fridge Contents Analyzer</h1>
+    <p>Take a photo of your fridge to get suggestions.</p>
+
+    <!-- Camera and Image Upload -->
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap">Capture Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <button id="submit">Submit Photo</button>
+
+    <!-- Script to handle camera and uploading -->
+    <script>
+        // Elements for taking the snapshot
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var snap = document.getElementById('snap');
+        var submit = document.getElementById('submit');
+
+        // Get access to the camera
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        // Trigger photo take
+        snap.addEventListener("click", function() {
+            context.drawImage(video, 0, 0, 640, 480);
+        });
+
+        // Upload the image when submit is clicked
+        submit.addEventListener("click", function() {
+        canvas.toBlob(function(blob) {
+            var formData = new FormData();
+            formData.append('file', blob, 'image.jpg');
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData  // Sending as FormData instead of JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('Upload successful');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Upload failed');
+            });
+        }, 'image/jpeg');
+    });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
