@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggested Recipes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-color: #007BFF; 
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: auto; 
+        }
+        h1, h2, p {
+            margin: 10px;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+        }
+        a {
+            color: #FFD700; 
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        div.recipe {
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 10px;
+            border-radius: 10px;
+            width: 80%;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipes you can make</h1>
+    <div>
+        {% for recipe in recipes %}
+            <div class="recipe">
+                <h2>{{ recipe['name'] }}</h2>
+                <p>{{ recipe['description'] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('index') }}">Try another image</a>
+</body>
+</html>
