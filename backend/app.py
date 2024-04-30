@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from openai import OpenAI
+from openai import *
 import base64
 import requests
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 @app.route("/")
 def hello_world():
     return render_template("index.html")
-
+    
 
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
