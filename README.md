@@ -1,7 +1,7 @@
 # Fridge Contents Analyzer
 
 ## Description
-This project allows its users to easily identify what dishes they can make while using the ingredients available to them. The user can simply upload a picture of the ingredients currently accessible to them, and then the program returns recipes for potential dishes that the user can make. The user will also have available to them a history of past pictures that they uploaded along with its corresponding recipes for future reference.
+This project allows its users to easily identify what dishes they can make while using the ingredients available to them. The user can simply upload a picture of the ingredients currently accessible to them, and then the program returns recipes for potential dishes that the user can make. 
 
 ## Container Images
 [MongoDB Container](https://hub.docker.com/_/mongo)
@@ -9,7 +9,11 @@ This project allows its users to easily identify what dishes they can make while
 [App Container]()
 
 ## Configuration/Setup Instructions
-To successfully setup the program, first clone the repository locally. Then in the "backend" folder, create a .env file. Here you will need to set the variable OPENAI_API_KEY. This should be set to a valid OpenAI key that has access to the gpt-4-turbo model.Then you can set the variable MONGO_URI, which should be set to the database connection string of the database that you are using. If not set, the default value for this is "mongodb://localhost:27017/". You can also set the variable MONGO_DB, which would specify which database you are using. The default value of this is "pictures". Then the program should be ready to be run. 
+To successfully setup the program, first clone the repository locally. Make sure you already have mongodb running locally on your machine, or adjust the MONGO_URI in the docker compose file to point to it. Then simply go into the database folder and run the command 
+```
+docker-compose up --build
+```
+Then you can navigate to http://localhost:5000/ to see the program running.
 
 ## Team Members
 [Noah Zhou](https://github.com/nz792)
