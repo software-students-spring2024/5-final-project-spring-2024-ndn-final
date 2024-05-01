@@ -4,16 +4,16 @@ import base64
 import requests
 from dotenv import load_dotenv
 import os
-import pymongo
+from pymongo import MongoClient
 
 
 app = Flask(__name__)
 load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
-connectionn = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-dbn = os.getenv("MONGO_DB", "pictures")
-connection = pymongo.MongoClient(connectionn)
-db = connection[dbn]
+client = MongoClient(os.getenv('MONGO_URI'))
+db = client.get_database("Recipe")
+collection = db.get_collection("images")
+
 
 @app.route("/")
 def hello_world():
@@ -33,7 +33,6 @@ def upload_image():
     file = request.files["file"]
     image_data = file.read()
     base64_image = base64.b64encode(image_data).decode('utf-8')
-    result = db.pics.insert_one({"image": base64_image})
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {openai_api_key}"}
     payload = {
         "model": "gpt-4-turbo",
@@ -41,17 +40,19 @@ def upload_image():
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "What’s in this image?"},
+                    {"type": "text", "text": "Based on the ingredients in the image, can you suggest a recipe?"},
                     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}},
                 ],
             }
         ],
         "max_tokens": 300,
     }
+    # add error handling here
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
     response_json = response.json()
-    db.pics.update_one({"image": base64_image}, {"$set": {"response": response_json['choices'][0]['message']['content']}})
-    return response.json(), 200
+    print(response_json)
+    result = collection.insert_one({"image": base64_image, "recipe": response_json['choices'][0]['message']['content']})
+    return jsonify({"response": response_json['choices'][0]['message']}), 200
 
 
 if __name__ == "__main__":
