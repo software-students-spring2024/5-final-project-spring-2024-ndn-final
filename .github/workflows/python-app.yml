@@ -30,6 +30,7 @@ jobs:
         cd backend
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         docker-compose up -d
+        ls
         docker-compose exec -T web-app pip3 install pytest 
         docker-compose exec -T web-app pytest
     
