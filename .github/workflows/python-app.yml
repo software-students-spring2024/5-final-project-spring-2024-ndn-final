@@ -33,7 +33,7 @@ jobs:
     - name: Test with pytest
       run: |
         cd backend
-        python3 -m pip install docker-compose
+        pip install docker-compose
         docker-compose up -d
         docker-compose exec web-app pip3 install pytest
         docker-compose exec web-app pytest
