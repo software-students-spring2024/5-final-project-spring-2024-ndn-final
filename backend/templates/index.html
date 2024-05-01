@@ -33,6 +33,9 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        #responseArea {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -42,6 +45,7 @@
     <button id="snap">Capture Photo</button>
     <canvas id="canvas" style="display:none;"></canvas>
     <button id="submit">Submit Photo</button>
+    <div id="responseArea">Response will appear here...</div>
 
     <script>
         var video = document.getElementById('video');
@@ -77,19 +81,21 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => {
-                    if(response.ok) {
-                        window.location.href = '/recipes';
-                    } else {
-                        throw new Error('Failed to upload image');
-                    }
+                .then(response => response.json())
+                .then(data =>
+                {
+                    console.log('Success:', data);
+                    responseArea.innerHTML = 'Suggested Recipe: ' + data.response.content;
+                })
+                    
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Upload failed');
                 });
             }, 'image/jpeg');
-        });
+            
+        ;
     </script>
 </body>
 </html>
