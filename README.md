@@ -7,7 +7,7 @@ This project allows its users to easily identify what dishes they can make while
 ## Container Images
 [MongoDB Container](https://hub.docker.com/_/mongo)
 
-[App Container]()
+[App Container](https://hub.docker.com/ /web-app)
 
 ## Configuration/Setup Instructions
 To successfully setup the program, first clone the repository locally. Make sure you already have mongodb running locally on your machine, or adjust the MONGO_URI in the docker compose file to point to it. Then simply go into the database folder and run the command 
